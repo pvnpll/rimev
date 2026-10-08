@@ -29,10 +29,14 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Rimev",
   description: "Mobile-first personal spaced repetition learning app",
+  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "Rimev",
+  },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
   },
 };
 

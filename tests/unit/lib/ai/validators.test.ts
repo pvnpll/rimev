@@ -26,13 +26,13 @@ describe("AI Validators", () => {
       expect(parsed.context.preferences.examples).toBe(true);
     });
 
-    it("rejects batchSize below 5 or above 25", () => {
+    it("rejects batchSize below 1 or above 25", () => {
       expect(() =>
         generationRequestSchema.parse({
           goal: "Learn Kannada",
           topic: "Basics",
           level: "beginner",
-          batchSize: 4,
+          batchSize: 0,
         }),
       ).toThrow();
 

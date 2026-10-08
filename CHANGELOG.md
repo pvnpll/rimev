@@ -8,6 +8,16 @@ Release notes are **drafted** on each `main` merge; **published** only when expl
 
 ---
 
+## [v1.10.0] — 2026-10-08 (Published)
+
+**iOS PWA Fix** — Move to static manifest and exclude from middleware.
+
+→ [Full release notes](docs/releases/v1.10.0.md)
+
+### Fixed
+- Fixed iOS Safari treating the app as a bookmark by using a static `manifest.json` and exempting it from auth middleware.
+- Ensured explicit Apple web app meta tags are present in root layout.
+
 ## [v1.8.1] — 2026-09-18 (Published)
 
 **UI polish batch** — Viewer header Back + theme toggle together, header loading skeletons, keyboard focus states, 44px title-edit target with retry-safe saves, guest copy and practice landing polish.
