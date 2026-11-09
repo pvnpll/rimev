@@ -1,6 +1,6 @@
 import { RECENT_DECK_LIMIT } from "@/lib/constants/deck-limits";
 import { deckRepository } from "@/lib/repositories/deck.repository";
-import { statsRepository } from "@/lib/repositories/stats.repository";
+import { statsRepository, type DailySummaryOptions } from "@/lib/repositories/stats.repository";
 import type { DeckWithStats } from "@/types/deck";
 
 export interface DashboardSummary {
@@ -14,9 +14,9 @@ export interface DashboardSummary {
 }
 
 export const dashboardService = {
-  async getSummary(userId: string): Promise<DashboardSummary> {
+  async getSummary(userId: string, options?: DailySummaryOptions): Promise<DashboardSummary> {
     const [summary, recentDecks] = await Promise.all([
-      statsRepository.getDailySummary(userId),
+      statsRepository.getDailySummary(userId, options),
       deckRepository.findRecentByUser(userId, RECENT_DECK_LIMIT),
     ]);
 
