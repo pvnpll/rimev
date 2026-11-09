@@ -127,7 +127,15 @@ export default async function LandingPage() {
             <span className="text-sm text-muted-foreground">Rimev AI</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Rimev. All rights reserved.
+            &copy; {new Date().getFullYear()} Rimev. All rights reserved. · Developed by{' '}
+            <a
+              href="https://pvnpll.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium underline underline-offset-4 hover:text-foreground transition-colors"
+            >
+              pvnpll
+            </a>
           </p>
         </div>
       </footer>
