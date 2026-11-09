@@ -101,32 +101,32 @@ flowchart LR
 | **Spaced repetition** | Showing cards at intervals based on difficulty (Daily Review) |
 | **Streak** | Consecutive days with at least one Daily Review |
 
-## What Is Available Now (v1.5)
+## What Is Available Now (v1.10.0)
 
-- **Practice mode** — opens on launch; cards from your recent decks
-- **Daily Review** — spaced-repetition sessions from dashboard
-- **Rename decks and lessons** — pencil icon on deck detail page
+- **Practice mode** — opens on launch; gesture-driven swipe cards from your recent decks
+- **Daily Review** — spaced-repetition sessions from dashboard when cards are due
+- **AI Mode** — progressive streaming flashcard generator with multiple models, topic suggestions, and tutor notes
+- **Guest mode** — explore public decks and practice without signing in
+- **Rename decks and lessons** — 44px touch targets on deck detail and lesson rows
 - **Import decks** — upload or paste JSON; confirm with Import JSON button
-- Dashboard with due count, reviewed today, streak, deck/card totals
-- Deck list, create, delete, detail, and **Practice deck**
+- Dashboard with due count, reviewed today, streak, mature card counts, and totals
+- Deck list, create, delete, detail, visibility toggle (public/private), and **Practice deck**
 - Lessons: create, delete, tap anywhere on a lesson row to practice (lesson-scoped)
-- Sign out returns you to Explore
-- Public/private decks, Explore, import public decks to library
-- Usernames, sign in with username, author credits on shared decks
+- Progressive Web App (PWA): installable on iOS and Android
+- Usernames, sign in with username or email, author credits on shared decks
 - Feedback, light/dark theme
-- Live deployment at [rimev.vercel.app](https://rimev.vercel.app)
+- Live deployment at [rimev.pvnpll.in](https://rimev.pvnpll.in) (and [rimev.vercel.app](https://rimev.vercel.app))
 
 ## What Is Coming Later
 
 See [progress-and-roadmap.md](./progress-and-roadmap.md) for the full phased plan. Candidates include:
 
-- Edit deck description and color in the UI
-- Lesson reorder
-- Add and edit cards directly on the deck page
+- Direct card creation and editing on the deck detail view
+- Lesson reordering and deck color customization
 - Export decks as JSON
-- Statistics page with charts
+- Interactive statistics page with study charts
 - Tags, image/audio on cards, more import formats
 
 ## Current App Status In One Sentence
 
-**Rimev v1.5 is a mobile learning app: practice endlessly on launch, run Daily Review when cards are due, rename decks and lessons, and manage or share content from your phone.**
+**Rimev v1.10.0 is a mobile spaced repetition app: practice endlessly with swipe cards on launch, run Daily Review when cards are due, generate flashcards with AI, rename decks and lessons, and install as a PWA.**

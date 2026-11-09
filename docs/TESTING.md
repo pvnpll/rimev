@@ -53,30 +53,40 @@ curl http://localhost:3000/api/health
 
 Expected: `{"status":"ok","timestamp":"..."}`
 
-## Manual Test Checklist (v1.5)
+## Manual Test Checklist (v1.10.0)
+
+### Guest (unauthenticated)
+
+| Step | URL | Verify |
+|------|-----|--------|
+| 1 | `/` | Redirects to `/explore` with public decks |
+| 2 | `/explore` | Browse decks, tap public deck to preview |
+| 3 | `/decks/[id]` | Tap lesson to study via swipe cards in guest mode |
+| 4 | `/practice` or `/review` | Auth wall prompt with "Continue as guest" escape hatch |
 
 ### Without Supabase (mock user)
 
 | Step | URL | Verify |
 |------|-----|--------|
-| 1 | `/` or `/login` | Redirects to `/practice` with a card |
+| 1 | `/` or `/login` | Redirects to `/practice` with a swipe card |
 | 2 | `/practice` | Reveal card, rate 1–5, next card loads |
 | 3 | `/dashboard` | Due count, streak, Practice + Daily Review buttons |
 | 4 | `/decks` | Lists seeded "Getting Started" deck |
 | 5 | `/decks/[id]` | Rename deck (pencil), lessons list, practice lesson |
 | 6 | `/review` | Due cards, reveal, rate 1–5 (Daily Review) |
-| 7 | `/settings/import` | Upload JSON loads text; Import JSON button required |
-| 8 | `/search` | Search "hello" or deck title |
-| 9 | `/settings` | Theme toggle, about text mentions Practice |
+| 7 | `/ai` | Generate cards via SSE, view progressive cards |
+| 8 | `/settings/import` | Upload JSON loads text; Import JSON button required |
+| 9 | `/search` | Search "hello" or deck title |
+| 10 | `/settings` | Theme toggle, about text mentions Practice and Daily Review |
 
 ### With Supabase Auth
 
 | Step | URL | Verify |
 |------|-----|--------|
-| 1 | `/login` | Sign in with email/password |
-| 2 | `/auth/callback` | Redirects to `/practice` after signup |
-| 3 | `/settings` | Account section shows email, sign out works |
-| 4 | Sign out → `/login` | Unauthenticated redirect |
+| 1 | `/login` | Sign in with email/password or username |
+| 2 | `/auth/callback` | Redirects to `/practice` after authentication |
+| 3 | `/settings` | Account section shows email and username |
+| 4 | Sign out → `/explore` | Returns unauthenticated users to Explore |
 
 ### After Daily Review session
 
@@ -96,9 +106,10 @@ Expected: `{"status":"ok","timestamp":"..."}`
 
 | Type | Command | Coverage |
 |------|---------|----------|
-| Unit | `npm run test` | Scheduler algorithm |
-| E2E | `npm run test:e2e` | Health, nav, decks, review, theme |
+| Unit | `npm test` | 48 tests: Schedulers, AI generation, providers, validators, dedup, session |
+| Typecheck | `npm run typecheck` | TypeScript compiler (`tsc --noEmit`) |
 | All | `npm run check` | typecheck + unit + build |
+| E2E | `npm run test:e2e` | Playwright suites: Health, nav, decks, review, AI smoke, theme |
 
 E2E uses iPhone 13 viewport (mobile-first).
 

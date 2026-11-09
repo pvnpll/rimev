@@ -1,12 +1,12 @@
 # Progress and Roadmap
 
-**Last updated:** September 2026 — **v1.8.1** (UI polish batch)\
+**Last updated:** November 2026 — **v1.10.0** (iOS PWA & AI Generation Baseline)\
 **Versioning:** [release-versioning.md](./release-versioning.md) — SemVer; every `main` merge = new version  
 **Policy:** Plan features by target release. Implement after you approve. Publish release notes only when you ask.
 
 ---
 
-## Release map (proposed)
+## Release map
 
 | Version | Status | Scope | Roadmap |
 |---------|--------|-------|---------|
@@ -26,14 +26,15 @@
 | **v1.7.4** | ✅ Published | Labeled nav & guest escape hatch (Fix #5) | UX polish |
 | **v1.8.0** | ✅ Published | Unified swipe UI for practice & review | UX |
 | **v1.8.1** | ✅ Published | UI polish batch (header, focus, title edit, guest copy) | UX polish |
-| **v1.0.1** | Open | Patches: bugs, perf, deploy fixes | Ad-hoc |
-| **v1.8.0** | Planned | Deck description/color edit, lesson reorder, card UI on deck page | Phase A (rest) |
-| **v1.9.0** | Planned | JSON export | Phase B |
-| **v1.9.0** | Planned | Statistics / charts | Phase C |
-| **v2.0.0** | Planned | Tags | Phase D |
-| **v2.1.0** | Planned | Image/audio cards | Phase E |
-| **v2.2.0** | Planned | CSV import, review filters | Phase F + G |
-| **v3.0.0** | Future | Breaking changes, roles, native API | Phase H / I |
+| **v1.9.x** | ✅ Published | AI Learning Engine (SSE streaming, provider cascade, context memory, tutor notes) | AI Mode |
+| **v1.10.0** | ✅ Published | iOS PWA fixes (static manifest, Apple meta tags, middleware exempt) | Mobile PWA |
+| **v1.11.0** | Planned | Deck description/color edit, lesson reorder, direct card UI on deck page | Phase A (completion) |
+| **v1.12.0** | Planned | JSON export (deck + library) | Phase B |
+| **v1.13.0** | Planned | Detailed study statistics & visual charts | Phase C |
+| **v2.0.0** | Planned | Tags taxonomy, filtering, and tag management | Phase D |
+| **v2.1.0** | Planned | Rich media cards (image and audio via Supabase Storage) | Phase E |
+| **v2.2.0** | Planned | CSV import & custom review filters | Phase F + G |
+| **v3.0.0** | Future | Platform (roles/admin, native clients, offline sync queue) | Phase H / I |
 
 Release notes: [docs/releases/](../releases/) · Changelog: [CHANGELOG.md](../../CHANGELOG.md)
 
@@ -272,7 +273,7 @@ These exist in code partially but are **not required for v1 stability**:
 > Map features to **target versions** below. Adjust scope or merge versions before approving work.  
 > See [release-versioning.md](./release-versioning.md) for MAJOR/MINOR/PATCH rules.
 
-### v1.6.0 — Phase A (continued): Remaining content editing
+### v1.11.0 — Phase A (continued): Remaining content editing & direct card UI
 
 **Goal:** Complete content editing without re-importing JSON.
 
@@ -283,11 +284,11 @@ These exist in code partially but are **not required for v1 stability**:
 | Mount `CardsSection` on deck detail | Medium | High |
 | Inline card create/edit/delete on deck page | Medium | High |
 
-**Depends on:** v1.5.0 title editing (shipped).
+**Depends on:** v1.5.0 title editing and `src/features/cards/` component suite (shipped).
 
 ---
 
-### v1.7.0 — Phase B: Export
+### v1.12.0 — Phase B: Export
 
 **Goal:** Portable backup and sharing prep (personal use).
 
@@ -301,7 +302,7 @@ These exist in code partially but are **not required for v1 stability**:
 
 ---
 
-### v1.8.0 — Phase C: Statistics and progress
+### v1.13.0 — Phase C: Statistics and progress
 
 **Goal:** Visual learning history beyond dashboard counts.
 
@@ -317,7 +318,7 @@ These exist in code partially but are **not required for v1 stability**:
 
 ---
 
-### v1.9.0 — Phase D: Tags
+### v2.0.0 — Phase D: Tags
 
 **Goal:** Organize and filter content.
 
@@ -332,7 +333,7 @@ These exist in code partially but are **not required for v1 stability**:
 
 ---
 
-### v2.0.0 — Phase E: Rich cards (media)
+### v2.1.0 — Phase E: Rich cards (media)
 
 **Goal:** Image and audio on flashcards.
 
@@ -347,7 +348,7 @@ These exist in code partially but are **not required for v1 stability**:
 
 ---
 
-### v2.1.0 — Phase F + G: Import expansion & review enhancements
+### v2.2.0 — Phase F + G: Import expansion & review enhancements
 
 **Goal:** More import options and flexible review.
 
@@ -361,7 +362,7 @@ These exist in code partially but are **not required for v1 stability**:
 | Leech detection (cards failed N times) | Medium | Medium |
 | Markdown import | Medium | Low |
 
-**Depends on:** Card UI on deck page (v1.6.0).
+**Depends on:** Card UI on deck page.
 
 ---
 
@@ -384,11 +385,11 @@ These exist in code partially but are **not required for v1 stability**:
 
 ## Suggested priority (by release)
 
-1. **v1.6.0** — Remaining content editing (deck fields, card UI on deck page)
-2. **v1.7.0** — Export
-3. **v1.8.0** — Statistics
-4. **v1.9.0** — Tags
-5. **v2.0.0+** — Media, CSV import, platform — as needed
+1. **v1.11.0** — Remaining content editing (deck fields, card UI on deck page)
+2. **v1.12.0** — Export
+3. **v1.13.0** — Statistics
+4. **v2.0.0** — Tags
+5. **v2.1.0+** — Media, CSV import, platform — as needed
 
 ---
 

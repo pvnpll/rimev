@@ -148,12 +148,14 @@ Use this to plan features by version. **Adjust when you review** — nothing shi
 | **v1.7.4** | PATCH | Labeled nav & guest escape hatch (Fix #5) | Shipped ✅ |
 | **v1.8.0** | MINOR | Unified swipe UI for practice & review | Shipped ✅ |
 | **v1.8.1** | PATCH | UI polish batch (header, focus, title edit, guest copy) | Shipped ✅ |
-| **v1.8.0** | MINOR | Deck description/color edit, lesson reorder, card UI on deck page | Phase A (rest) |
-| **v1.9.0** | MINOR | JSON export (deck + library) | Phase B |
-| **v1.8.0** | MINOR | Statistics page, review charts | Phase C |
-| **v1.9.0** | MINOR | Tags API + UI | Phase D |
-| **v2.0.0** | MINOR | Image/audio on cards (Supabase Storage) | Phase E |
-| **v2.1.0** | MINOR | CSV import, review deck filter | Phase F + G |
+| **v1.9.x** | MINOR | AI Learning Engine (SSE streaming, provider cascade, context memory, tutor notes) | Shipped ✅ |
+| **v1.10.0** | MINOR | iOS PWA fixes (static manifest, Apple meta tags, middleware exempt) | Shipped ✅ |
+| **v1.11.0** | MINOR | Deck description/color edit, lesson reorder, direct card UI on deck page | Phase A (completion) |
+| **v1.12.0** | MINOR | JSON export (deck + library) | Phase B |
+| **v1.13.0** | MINOR | Statistics page, review charts | Phase C |
+| **v2.0.0** | MINOR | Tags taxonomy, filtering, and tag management | Phase D |
+| **v2.1.0** | MINOR | Image/audio on cards (Supabase Storage) | Phase E |
+| **v2.2.0** | MINOR | CSV import, review deck filter | Phase F + G |
 | **v3.0.0** | MAJOR | Roles/admin, breaking API changes, native app API contract | Phase H / I |
 
 Versions can be **merged or split** (e.g. export + statistics in one `v1.2.0`) based on what you ship in a single main merge.
