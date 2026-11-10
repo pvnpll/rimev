@@ -95,7 +95,10 @@ describe("PWA Configuration & iOS Support", () => {
     const pwaManagerContent = fs.readFileSync(pwaManagerPath, "utf-8");
 
     expect(pwaManagerContent).toContain('navigator.serviceWorker');
-    expect(pwaManagerContent).toContain('.register("/sw.js", { scope: "/" })');
+    expect(pwaManagerContent).toContain('navigator.serviceWorker.register("/sw.js"');
+    expect(pwaManagerContent).toContain('updateViaCache: "none"');
+    expect(pwaManagerContent).toContain('registration?.update()');
+    expect(pwaManagerContent).toContain('visibilitychange');
     expect(pwaManagerContent).not.toContain("window.location.reload()");
   });
 });
@@ -126,11 +129,17 @@ describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
     expect(html).toContain('type="password"');
     expect(html).toContain('autoComplete="new-password"');
     expect(html).toContain('minLength="6"');
+    expect(html).toContain('passwordrules="minlength: 6; maxlength: 128;"');
+    expect(html).toContain('maxLength="128"');
 
     // Confirm password field has id="confirm-password", name="confirm-password", type="password", and autocomplete="new-password"
     expect(html).toContain('for="confirm-password"');
     expect(html).toContain('id="confirm-password"');
     expect(html).toContain('name="confirm-password"');
+    expect(html.match(/passwordrules="minlength: 6; maxlength: 128;"/g)).toHaveLength(2);
+
+    // Inputs remain browser-owned so iOS can inject a generated password without React replacing it.
+    expect(html).not.toMatch(/<input[^>]+value=/);
 
     // Password visibility toggle buttons exist for user accessibility
     expect(html).toContain('aria-label="Show password"');
@@ -157,6 +166,9 @@ describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
     expect(html).toContain('name="password"');
     expect(html).toContain('type="password"');
     expect(html).toContain('autoComplete="current-password"');
+
+    // Login inputs remain uncontrolled so iCloud Keychain and third-party managers can fill them.
+    expect(html).not.toMatch(/<input[^>]+value=/);
 
     // Password visibility toggle exists
     expect(html).toContain('aria-label="Show password"');

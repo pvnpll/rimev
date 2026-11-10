@@ -30,9 +30,6 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/practice";
 
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,15 +48,15 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     const formPassword =
       (formData.get("password") as string) ||
       (formData.get("new-password") as string) ||
-      password;
+      "";
     const formConfirmPassword =
       (formData.get("confirm-password") as string) ||
       (formData.get("confirmPassword") as string) ||
-      confirmPassword;
+      "";
     const formIdentifier = (
       (formData.get("email") as string) ||
       (formData.get("username") as string) ||
-      identifier
+      ""
     ).trim();
 
     if (isSignup && formPassword !== formConfirmPassword) {
@@ -174,8 +171,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
-              value={identifier}
-              onChange={(event) => setIdentifier(event.target.value)}
+              inputMode={isSignup ? "email" : undefined}
             />
           </div>
 
@@ -192,9 +188,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
+                passwordrules={isSignup ? "minlength: 6; maxlength: 128;" : undefined}
+                maxLength={128}
                 className="pr-10"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
               />
               <button
                 type="button"
@@ -221,9 +217,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
+                  passwordrules="minlength: 6; maxlength: 128;"
+                  maxLength={128}
                   className="pr-10"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
                 />
                 <button
                   type="button"
