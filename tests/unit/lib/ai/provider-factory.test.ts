@@ -18,12 +18,36 @@ describe("createAIProvider", () => {
     expect(provider.name).toBe("openrouter");
   });
 
+  it("creates GroqProvider when requested", () => {
+    const provider = createAIProvider({
+      providerName: "groq",
+      groqOptions: { apiKey: "test-groq-key" },
+    });
+    expect(provider.name).toBe("groq");
+  });
+
   it("creates OllamaCloudProvider when requested", () => {
     const provider = createAIProvider({
       providerName: "ollama",
       ollamaOptions: { apiKey: "test-ollama-key" },
     });
     expect(provider.name).toBe("ollama");
+  });
+
+  it("respects AI_PROVIDER=groq environment variable", () => {
+    const originalProvider = process.env.AI_PROVIDER;
+    const originalGroqKey = process.env.GROQ_API_KEY;
+
+    process.env.AI_PROVIDER = "groq";
+    process.env.GROQ_API_KEY = "test-groq-env-key";
+
+    try {
+      const provider = createAIProvider();
+      expect(provider.name).toBe("groq");
+    } finally {
+      process.env.AI_PROVIDER = originalProvider;
+      process.env.GROQ_API_KEY = originalGroqKey;
+    }
   });
 
   it("respects AI_PROVIDER=ollama environment variable", () => {

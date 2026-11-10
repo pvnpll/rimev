@@ -116,9 +116,9 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       };
     }
 
-    // Prepare fallback provider: Ollama → OpenRouter only. Gemini disabled.
+    // Prepare fallback provider: Groq/Ollama → OpenRouter only. Gemini disabled.
     let fallbackProvider: AIProvider | null = null;
-    if (!this.provider && provider.name === "ollama") {
+    if (!this.provider && (provider.name === "groq" || provider.name === "ollama")) {
       if (process.env.OPENROUTER_API_KEY) {
         try {
           fallbackProvider = createAIProvider({ providerName: "openrouter" });
@@ -247,6 +247,8 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       lastResult?.usage?.model ||
       (provider.name === "openrouter"
         ? "meta-llama/llama-3.3-70b-instruct:free"
+        : provider.name === "groq"
+        ? (process.env.GROQ_MODEL || "llama-3.3-70b-versatile")
         : provider.name === "ollama"
         ? (process.env.OLLAMA_MODEL || "gemma4:31b")
         : "gemini-3.6-flash");
@@ -295,9 +297,9 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       };
     }
 
-    // Prepare fallback provider: Ollama → OpenRouter only. Gemini disabled.
+    // Prepare fallback provider: Groq/Ollama → OpenRouter only. Gemini disabled.
     let fallbackProvider: AIProvider | null = null;
-    if (!this.provider && provider.name === "ollama") {
+    if (!this.provider && (provider.name === "groq" || provider.name === "ollama")) {
       if (process.env.OPENROUTER_API_KEY) {
         try {
           fallbackProvider = createAIProvider({ providerName: "openrouter" });
@@ -439,6 +441,8 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       (lastResult as ProviderGenerateCardsResult | null)?.usage?.model ||
       (provider.name === "openrouter"
         ? "meta-llama/llama-3.3-70b-instruct:free"
+        : provider.name === "groq"
+        ? (process.env.GROQ_MODEL || "llama-3.3-70b-versatile")
         : provider.name === "ollama"
         ? (process.env.OLLAMA_MODEL || "gemma4:31b")
         : "gemini-3.6-flash");

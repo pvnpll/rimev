@@ -38,6 +38,13 @@ export interface AIProvider {
 
 ## Provider Implementations
 
+### GroqProvider
+- Uses Groq Cloud HTTP API (`https://api.groq.com/openai/v1/chat/completions`)
+- Ultra-low latency OpenAI-compatible completions
+- Default model: `llama-3.3-70b-versatile` (with fallbacks to `llama-3.1-8b-instant`, `openai/gpt-oss-20b`, `openai/gpt-oss-120b`)
+- Native structured JSON output via `response_format: { type: "json_object" }`
+- Environment: `GROQ_API_KEY`, `GROQ_MODEL` (optional), `GROQ_BASE_URL` (optional)
+
 ### GeminiProvider
 - Uses `@google/genai` SDK (Gemini API)
 - Initial model: `gemini-3.6-flash` (free tier)
@@ -85,7 +92,10 @@ export function createAIProvider(): AIProvider {
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `AI_PROVIDER` | No (default: `gemini`) | Active provider: `gemini`, `openrouter`, or `ollama` |
+| `AI_PROVIDER` | No (default: `groq` or `gemini`) | Active provider: `groq`, `gemini`, `openrouter`, or `ollama` |
+| `GROQ_API_KEY` | When AI_PROVIDER=groq | Groq Cloud API key |
+| `GROQ_BASE_URL` | No (default: `https://api.groq.com/openai/v1`) | Groq API base URL |
+| `GROQ_MODEL` | No (default: `llama-3.3-70b-versatile`) | Groq model identifier |
 | `GEMINI_API_KEY` | When AI_PROVIDER=gemini | Google AI API key |
 | `OPENROUTER_API_KEY` | When AI_PROVIDER=openrouter | OpenRouter API key |
 | `OLLAMA_API_KEY` | When AI_PROVIDER=ollama | Ollama Cloud API key |

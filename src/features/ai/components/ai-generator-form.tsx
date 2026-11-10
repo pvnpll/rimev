@@ -139,7 +139,7 @@ export function AIGeneratorForm({ onGenerate, isLoading, error }: AIGeneratorFor
         subjectKey,
         level,
         batchSize: 10,
-        provider: "ollama",
+        provider: "groq",
         context: mergedContext,
       });
     } catch (err) {
