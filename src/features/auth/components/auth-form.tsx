@@ -45,9 +45,15 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
     // Read directly from form controls as fallback if browser autofill / strong password fill bypassed React state
     const formData = new FormData(event.currentTarget);
-    const formPassword = (formData.get("password") as string) || password;
-    const formConfirmPassword = (formData.get("confirm-password") as string) || confirmPassword;
-    const formIdentifier = ((formData.get("username") as string) || identifier).trim();
+    const formPassword =
+      (formData.get("new-password") as string) ||
+      (formData.get("password") as string) ||
+      password;
+    const formConfirmPassword =
+      (formData.get("confirm-password") as string) ||
+      confirmPassword;
+    const formIdentifier =
+      ((formData.get("username") as string) || identifier).trim();
 
     if (isSignup && formPassword !== formConfirmPassword) {
       setError("Passwords do not match");
@@ -141,13 +147,16 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form method="post" action="#" className="space-y-4" onSubmit={handleSubmit}>
+        <form
+          method="post"
+          action={isSignup ? "/signup" : "/login"}
+          className="space-y-4"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-2">
-            <Label htmlFor={isSignup ? "email" : "identifier"}>
-              {isSignup ? "Email" : "Email or username"}
-            </Label>
+            <Label htmlFor="username">{isSignup ? "Email" : "Email or username"}</Label>
             <Input
-              id={isSignup ? "email" : "identifier"}
+              id="username"
               name="username"
               type={isSignup ? "email" : "text"}
               autoComplete="username"
@@ -161,10 +170,10 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor={isSignup ? "new-password" : "password"}>Password</Label>
             <Input
-              id="password"
-              name="password"
+              id={isSignup ? "new-password" : "password"}
+              name={isSignup ? "new-password" : "password"}
               type="password"
               autoComplete={isSignup ? "new-password" : "current-password"}
               required

@@ -81,18 +81,29 @@ describe("PWA Configuration & iOS Support", () => {
     expect(layoutContent).toMatch(/viewportFit:\s*['"]cover['"]/);
     expect(layoutContent).toMatch(/PWAManager/);
   });
+
+  it("pwa-manager.tsx forces updateViaCache none, auto-updates, and reloads on controllerchange for iOS PWA lifecycle", () => {
+    const pwaManagerPath = path.join(rootDir, "src/components/providers/pwa-manager.tsx");
+    const pwaManagerContent = fs.readFileSync(pwaManagerPath, "utf-8");
+
+    expect(pwaManagerContent).toContain('updateViaCache: "none"');
+    expect(pwaManagerContent).toContain("registration.update()");
+    expect(pwaManagerContent).toContain("controllerchange");
+    expect(pwaManagerContent).toContain("window.location.reload()");
+    expect(pwaManagerContent).toContain("SKIP_WAITING");
+  });
 });
 
 describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
   it("signup form renders with iOS WebKit strong password suggestion requirements", () => {
     const html = renderToStaticMarkup(React.createElement(AuthForm, { mode: "signup" }));
 
-    // Form element has explicit method="post" and action="#" for Safari heuristic matching
+    // Form element has explicit method="post" and action="/signup" (not anchor '#')
     expect(html).toContain('method="post"');
-    expect(html).toContain('action="#"');
+    expect(html).toContain('action="/signup"');
 
-    // Email/username field has id="email", name="username", type="email", and autocomplete="username"
-    expect(html).toContain('id="email"');
+    // Email/username field has id="username", name="username", type="email", and autocomplete="username"
+    expect(html).toContain('id="username"');
     expect(html).toContain('name="username"');
     expect(html).toContain('type="email"');
     expect(html).toContain('autoComplete="username"');
@@ -100,9 +111,9 @@ describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
     expect(html).toContain('autoCorrect="off"');
     expect(html).toContain('spellCheck="false"');
 
-    // New password field has id="password", name="password", type="password", autocomplete="new-password", and passwordrules
-    expect(html).toContain('id="password"');
-    expect(html).toContain('name="password"');
+    // New password field has id="new-password", name="new-password", type="password", autocomplete="new-password", and passwordrules
+    expect(html).toContain('id="new-password"');
+    expect(html).toContain('name="new-password"');
     expect(html).toContain('type="password"');
     expect(html).toContain('autoComplete="new-password"');
     expect(html).toContain('passwordrules="minlength: 6;"');
@@ -117,12 +128,12 @@ describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
   it("login form renders with iOS WebKit current password autofill requirements", () => {
     const html = renderToStaticMarkup(React.createElement(AuthForm, { mode: "login" }));
 
-    // Form element has explicit method="post" and action="#"
+    // Form element has explicit method="post" and action="/login"
     expect(html).toContain('method="post"');
-    expect(html).toContain('action="#"');
+    expect(html).toContain('action="/login"');
 
-    // Identifier field has id="identifier", name="username", and autocomplete="username"
-    expect(html).toContain('id="identifier"');
+    // Identifier field has id="username", name="username", and autocomplete="username"
+    expect(html).toContain('id="username"');
     expect(html).toContain('name="username"');
     expect(html).toContain('autoComplete="username"');
 
