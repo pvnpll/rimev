@@ -248,7 +248,7 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       (provider.name === "openrouter"
         ? "meta-llama/llama-3.3-70b-instruct:free"
         : provider.name === "groq"
-        ? (process.env.GROQ_MODEL || "llama-3.3-70b-versatile")
+        ? (process.env.GROQ_MODEL || "openai/gpt-oss-20b")
         : provider.name === "ollama"
         ? (process.env.OLLAMA_MODEL || "gemma4:31b")
         : "gemini-3.6-flash");
@@ -442,7 +442,7 @@ Respond strictly in JSON matching the schema, with 'nextTopic' and 'reasoning'.`
       (provider.name === "openrouter"
         ? "meta-llama/llama-3.3-70b-instruct:free"
         : provider.name === "groq"
-        ? (process.env.GROQ_MODEL || "llama-3.3-70b-versatile")
+        ? (process.env.GROQ_MODEL || "openai/gpt-oss-20b")
         : provider.name === "ollama"
         ? (process.env.OLLAMA_MODEL || "gemma4:31b")
         : "gemini-3.6-flash");
