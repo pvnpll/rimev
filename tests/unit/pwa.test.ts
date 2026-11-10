@@ -104,6 +104,19 @@ describe("PWA Configuration & iOS Support", () => {
 });
 
 describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
+  it("server-renders auth fields instead of hiding them behind a search-param Suspense bailout", () => {
+    const rootDir = path.resolve(__dirname, "../..");
+    const authForm = fs.readFileSync(path.join(rootDir, "src/features/auth/components/auth-form.tsx"), "utf-8");
+    const loginPage = fs.readFileSync(path.join(rootDir, "src/app/login/page.tsx"), "utf-8");
+    const signupPage = fs.readFileSync(path.join(rootDir, "src/app/signup/page.tsx"), "utf-8");
+
+    expect(authForm).not.toContain("useSearchParams");
+    expect(loginPage).not.toContain("Suspense");
+    expect(signupPage).not.toContain("Suspense");
+    expect(loginPage).toContain('<AuthForm mode="login" redirectTo=');
+    expect(signupPage).toContain('<AuthForm mode="signup" redirectTo=');
+  });
+
   it("signup form renders with iOS WebKit strong password suggestion requirements", () => {
     const html = renderToStaticMarkup(React.createElement(AuthForm, { mode: "signup" }));
 
