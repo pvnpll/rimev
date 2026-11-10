@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 import { formatAuthError, isExistingUserSignup } from "@/features/auth/auth-errors";
 import { accountApi } from "@/features/auth/services/account-api";
@@ -32,6 +33,8 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -46,14 +49,18 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     // Read directly from form controls as fallback if browser autofill / strong password fill bypassed React state
     const formData = new FormData(event.currentTarget);
     const formPassword =
-      (formData.get("new-password") as string) ||
       (formData.get("password") as string) ||
+      (formData.get("new-password") as string) ||
       password;
     const formConfirmPassword =
       (formData.get("confirm-password") as string) ||
+      (formData.get("confirmPassword") as string) ||
       confirmPassword;
-    const formIdentifier =
-      ((formData.get("username") as string) || identifier).trim();
+    const formIdentifier = (
+      (formData.get("email") as string) ||
+      (formData.get("username") as string) ||
+      identifier
+    ).trim();
 
     if (isSignup && formPassword !== formConfirmPassword) {
       setError("Passwords do not match");
@@ -150,14 +157,17 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <form
           method="post"
           action={isSignup ? "/signup" : "/login"}
+          autoComplete="on"
           className="space-y-4"
           onSubmit={handleSubmit}
         >
           <div className="space-y-2">
-            <Label htmlFor="username">{isSignup ? "Email" : "Email or username"}</Label>
+            <Label htmlFor={isSignup ? "email" : "username"}>
+              {isSignup ? "Email" : "Email or username"}
+            </Label>
             <Input
-              id="username"
-              name="username"
+              id={isSignup ? "email" : "username"}
+              name={isSignup ? "email" : "username"}
               type={isSignup ? "email" : "text"}
               autoComplete="username"
               required
@@ -170,40 +180,60 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={isSignup ? "new-password" : "password"}>Password</Label>
-            <Input
-              id={isSignup ? "new-password" : "password"}
-              name={isSignup ? "new-password" : "password"}
-              type="password"
-              autoComplete={isSignup ? "new-password" : "current-password"}
-              required
-              minLength={6}
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              passwordrules={isSignup ? "minlength: 6;" : undefined}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
-
-          {isSignup ? (
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm password</Label>
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
               <Input
-                id="confirm-password"
-                name="confirm-password"
-                type="password"
-                autoComplete="new-password"
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete={isSignup ? "new-password" : "current-password"}
                 required
                 minLength={6}
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
-                passwordrules="minlength: 6;"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
+                className="pr-10"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
+              <button
+                type="button"
+                className="absolute right-0 top-0 flex h-9 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+          {isSignup ? (
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password">Confirm password</Label>
+              <div className="relative">
+                <Input
+                  id="confirm-password"
+                  name="confirm-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  minLength={6}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className="pr-10"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute right-0 top-0 flex h-9 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
           ) : null}
 
