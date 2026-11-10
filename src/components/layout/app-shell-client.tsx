@@ -21,7 +21,7 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
     <div className="min-h-dvh bg-background text-foreground md:bg-muted/50">
       <div className="mx-auto min-h-dvh w-full max-w-md bg-background md:border-x md:border-border md:shadow-sm">
         <AppHeader />
-        <main className="min-h-dvh pb-28 pt-16">
+        <main className="min-h-dvh pb-28 [padding-bottom:calc(7rem+env(safe-area-inset-bottom,0px))] pt-16">
           <div className="px-4 py-5">{children}</div>
         </main>
         <FloatingNav />

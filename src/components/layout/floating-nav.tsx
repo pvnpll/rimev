@@ -78,7 +78,7 @@ export function FloatingNav() {
     : navItems.filter((item) => item.href === "/explore" || item.href === "/practice" || item.href === "/ai");
 
   return (
-    <nav className="fixed bottom-4 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center justify-around rounded-full border bg-card/95 px-2 py-2 shadow-lg backdrop-blur">
+    <nav className="fixed bottom-4 [bottom:calc(1rem+env(safe-area-inset-bottom,0px))] left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center justify-around rounded-full border bg-card/95 px-2 py-2 shadow-lg backdrop-blur">
       {visibleItems.map(({ href, label, icon: Icon, prefetchKey }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (

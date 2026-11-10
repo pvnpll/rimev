@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { PWAManager } from "@/components/providers/pwa-manager";
 
 import "./globals.css";
 
@@ -25,6 +26,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: 'cover',
 };
 export const metadata: Metadata = {
   title: "Rimev",
@@ -35,8 +37,18 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Rimev",
   },
+  icons: {
+    icon: [
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   other: {
     'apple-mobile-web-app-capable': 'yes',
+    'mobile-web-app-capable': 'yes',
   },
 };
 
@@ -57,7 +69,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {children}
+            <PWAManager />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
