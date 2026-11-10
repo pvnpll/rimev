@@ -14,23 +14,28 @@ import { AuthForm } from "@/features/auth/components/auth-form";
 describe("PWA Configuration & iOS Support", () => {
   const rootDir = path.resolve(__dirname, "../..");
   const manifestPath = path.join(rootDir, "public/manifest.json");
+  const webManifestPath = path.join(rootDir, "public/manifest.webmanifest");
 
-  it("manifest.json exists, is non-empty, and parses as valid JSON", () => {
+  it("manifest.json and manifest.webmanifest exist, are non-empty, and parse as valid JSON", () => {
     expect(fs.existsSync(manifestPath)).toBe(true);
-    const content = fs.readFileSync(manifestPath, "utf-8");
-    expect(content.trim().length).toBeGreaterThan(0);
+    expect(fs.existsSync(webManifestPath)).toBe(true);
 
-    const parsed = JSON.parse(content);
-    expect(parsed.name).toBe("Rimev");
-    expect(parsed.short_name).toBe("Rimev");
-    expect(parsed.start_url).toBe("/");
-    expect(parsed.scope).toBe("/");
-    expect(parsed.display).toBe("standalone");
-    expect(parsed.background_color).toBe("#09090b");
-    expect(parsed.theme_color).toBe("#09090b");
+    for (const file of [manifestPath, webManifestPath]) {
+      const content = fs.readFileSync(file, "utf-8");
+      expect(content.trim().length).toBeGreaterThan(0);
+
+      const parsed = JSON.parse(content);
+      expect(parsed.name).toBe("Rimev");
+      expect(parsed.short_name).toBe("Rimev");
+      expect(parsed.start_url).toBe("/");
+      expect(parsed.scope).toBe("/");
+      expect(parsed.display).toBe("standalone");
+      expect(parsed.background_color).toBe("#09090b");
+      expect(parsed.theme_color).toBe("#09090b");
+    }
   });
 
-  it("manifest.json references icons that all exist on disk", () => {
+  it("manifest references icons that all exist on disk", () => {
     const content = fs.readFileSync(manifestPath, "utf-8");
     const manifest = JSON.parse(content);
 
@@ -46,7 +51,8 @@ describe("PWA Configuration & iOS Support", () => {
     expect(purposes).toContain("maskable");
 
     for (const icon of manifest.icons) {
-      const iconPath = path.join(rootDir, "public", icon.src.replace(/^\//, ""));
+      const cleanPath = icon.src.replace(/^\//, "").split("?")[0];
+      const iconPath = path.join(rootDir, "public", cleanPath);
       expect(fs.existsSync(iconPath)).toBe(true);
       const stat = fs.statSync(iconPath);
       expect(stat.size).toBeGreaterThan(0);
@@ -63,7 +69,7 @@ describe("PWA Configuration & iOS Support", () => {
     expect(fs.statSync(precomposedPath).size).toBeGreaterThan(0);
   });
 
-  it("middleware.ts excludes manifest.json and sw.js from auth redirects", () => {
+  it("middleware.ts excludes manifest and sw.js from auth redirects", () => {
     const middlewarePath = path.join(rootDir, "src/middleware.ts");
     const middlewareContent = fs.readFileSync(middlewarePath, "utf-8");
 
@@ -71,26 +77,26 @@ describe("PWA Configuration & iOS Support", () => {
     expect(middlewareContent).toContain("sw");
   });
 
-  it("layout.tsx sets Apple web app metadata, viewportFit cover, and manifest link", () => {
+  it("layout.tsx sets Apple web app metadata, viewport scaling locks, and manifest link", () => {
     const layoutPath = path.join(rootDir, "src/app/layout.tsx");
     const layoutContent = fs.readFileSync(layoutPath, "utf-8");
 
-    expect(layoutContent).toMatch(/manifest:\s*['"]\/manifest\.json['"]/);
+    expect(layoutContent).toMatch(/manifest:\s*['"]\/manifest\.webmanifest['"]/);
     expect(layoutContent).toMatch(/capable:\s*true/);
     expect(layoutContent).toMatch(/title:\s*['"]Rimev['"]/);
     expect(layoutContent).toMatch(/viewportFit:\s*['"]cover['"]/);
+    expect(layoutContent).toMatch(/maximumScale:\s*1/);
+    expect(layoutContent).toMatch(/userScalable:\s*false/);
     expect(layoutContent).toMatch(/PWAManager/);
   });
 
-  it("pwa-manager.tsx forces updateViaCache none, auto-updates, and reloads on controllerchange for iOS PWA lifecycle", () => {
+  it("pwa-manager.tsx registers service worker cleanly without disrupting Safari crawlers", () => {
     const pwaManagerPath = path.join(rootDir, "src/components/providers/pwa-manager.tsx");
     const pwaManagerContent = fs.readFileSync(pwaManagerPath, "utf-8");
 
-    expect(pwaManagerContent).toContain('updateViaCache: "none"');
-    expect(pwaManagerContent).toContain("registration.update()");
-    expect(pwaManagerContent).toContain("controllerchange");
-    expect(pwaManagerContent).toContain("window.location.reload()");
-    expect(pwaManagerContent).toContain("SKIP_WAITING");
+    expect(pwaManagerContent).toContain('navigator.serviceWorker');
+    expect(pwaManagerContent).toContain('.register("/sw.js", { scope: "/" })');
+    expect(pwaManagerContent).not.toContain("window.location.reload()");
   });
 });
 
