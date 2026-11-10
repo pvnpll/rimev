@@ -1,6 +1,15 @@
-import { describe, expect, it } from "vitest";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { describe, expect, it, vi } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+import { AuthForm } from "@/features/auth/components/auth-form";
 
 describe("PWA Configuration & iOS Support", () => {
   const rootDir = path.resolve(__dirname, "../..");
@@ -71,5 +80,56 @@ describe("PWA Configuration & iOS Support", () => {
     expect(layoutContent).toMatch(/title:\s*['"]Rimev['"]/);
     expect(layoutContent).toMatch(/viewportFit:\s*['"]cover['"]/);
     expect(layoutContent).toMatch(/PWAManager/);
+  });
+});
+
+describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
+  it("signup form renders with iOS WebKit strong password suggestion requirements", () => {
+    const html = renderToStaticMarkup(React.createElement(AuthForm, { mode: "signup" }));
+
+    // Form element has explicit method="post" and action="#" for Safari heuristic matching
+    expect(html).toContain('method="post"');
+    expect(html).toContain('action="#"');
+
+    // Email/username field has id="email", name="username", type="email", and autocomplete="username"
+    expect(html).toContain('id="email"');
+    expect(html).toContain('name="username"');
+    expect(html).toContain('type="email"');
+    expect(html).toContain('autoComplete="username"');
+    expect(html).toContain('autoCapitalize="none"');
+    expect(html).toContain('autoCorrect="off"');
+    expect(html).toContain('spellCheck="false"');
+
+    // New password field has id="password", name="password", type="password", autocomplete="new-password", and passwordrules
+    expect(html).toContain('id="password"');
+    expect(html).toContain('name="password"');
+    expect(html).toContain('type="password"');
+    expect(html).toContain('autoComplete="new-password"');
+    expect(html).toContain('passwordrules="minlength: 6;"');
+    expect(html).toContain('minLength="6"');
+
+    // Confirm password field has id="confirm-password", name="confirm-password", type="password", autocomplete="new-password", and passwordrules
+    expect(html).toContain('id="confirm-password"');
+    expect(html).toContain('name="confirm-password"');
+    expect(html).toContain('passwordrules="minlength: 6;"');
+  });
+
+  it("login form renders with iOS WebKit current password autofill requirements", () => {
+    const html = renderToStaticMarkup(React.createElement(AuthForm, { mode: "login" }));
+
+    // Form element has explicit method="post" and action="#"
+    expect(html).toContain('method="post"');
+    expect(html).toContain('action="#"');
+
+    // Identifier field has id="identifier", name="username", and autocomplete="username"
+    expect(html).toContain('id="identifier"');
+    expect(html).toContain('name="username"');
+    expect(html).toContain('autoComplete="username"');
+
+    // Password field has id="password", name="password", type="password", and autocomplete="current-password"
+    expect(html).toContain('id="password"');
+    expect(html).toContain('name="password"');
+    expect(html).toContain('type="password"');
+    expect(html).toContain('autoComplete="current-password"');
   });
 });

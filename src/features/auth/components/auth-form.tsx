@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
 import { useState } from "react";
 
 import { formatAuthError, isExistingUserSignup } from "@/features/auth/auth-errors";
@@ -42,7 +43,13 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     setError(null);
     setMessage(null);
 
-    if (isSignup && password !== confirmPassword) {
+    // Read directly from form controls as fallback if browser autofill / strong password fill bypassed React state
+    const formData = new FormData(event.currentTarget);
+    const formPassword = (formData.get("password") as string) || password;
+    const formConfirmPassword = (formData.get("confirm-password") as string) || confirmPassword;
+    const formIdentifier = ((formData.get("username") as string) || identifier).trim();
+
+    if (isSignup && formPassword !== formConfirmPassword) {
       setError("Passwords do not match");
       return;
     }
@@ -51,7 +58,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
     try {
       const supabase = createClient();
-      let loginEmail = identifier.trim();
+      let loginEmail = formIdentifier;
 
       if (!isSignup && !loginEmail.includes("@")) {
         try {
@@ -66,7 +73,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       if (isSignup) {
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: loginEmail,
-          password,
+          password: formPassword,
           options: {
             emailRedirectTo: getAuthCallbackUrl(redirectTo),
           },
@@ -99,7 +106,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: loginEmail,
-        password,
+        password: formPassword,
       });
 
       if (signInError) {
@@ -134,14 +141,20 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form method="post" action="#" className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label htmlFor="identifier">{isSignup ? "Email" : "Email or username"}</Label>
+            <Label htmlFor={isSignup ? "email" : "identifier"}>
+              {isSignup ? "Email" : "Email or username"}
+            </Label>
             <Input
-              id="identifier"
+              id={isSignup ? "email" : "identifier"}
+              name="username"
               type={isSignup ? "email" : "text"}
-              autoComplete={isSignup ? "email" : "username"}
+              autoComplete="username"
               required
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               value={identifier}
               onChange={(event) => setIdentifier(event.target.value)}
             />
@@ -151,10 +164,15 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               autoComplete={isSignup ? "new-password" : "current-password"}
               required
               minLength={6}
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              passwordrules={isSignup ? "minlength: 6;" : undefined}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
@@ -162,13 +180,18 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
           {isSignup ? (
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm password</Label>
+              <Label htmlFor="confirm-password">Confirm password</Label>
               <Input
-                id="confirmPassword"
+                id="confirm-password"
+                name="confirm-password"
                 type="password"
                 autoComplete="new-password"
                 required
                 minLength={6}
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                passwordrules="minlength: 6;"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />
