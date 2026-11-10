@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Globe, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, Download, Globe, Sparkles, UserRound } from "lucide-react";
 
 import { DeckVisibilityToggle } from "@/features/decks/components/deck-visibility-toggle";
 import { ImportPublicDeckButton } from "@/features/decks/components/import-public-deck-button";
@@ -88,6 +88,14 @@ export function DeckDetailContent({ deckId }: { deckId: string }) {
               Practice deck
             </Link>
           </Button>
+          {deck.isOwner && (
+            <Button asChild variant="outline" size="lg">
+              <a href={`/api/decks/${deckId}/export`} download>
+                <Download className="h-4 w-4" />
+                Export deck
+              </a>
+            </Button>
+          )}
           {deck.isPublic && deck.isOwner && (
             <Badge variant="outline" className="gap-1">
               <Globe className="h-3 w-3" />

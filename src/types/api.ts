@@ -4,7 +4,7 @@ export interface ApiSuccess<T> {
 
 export interface ApiErrorBody {
   error: {
-    code: "VALIDATION" | "NOT_FOUND" | "UNAUTHORIZED" | "CONFLICT" | "INTERNAL";
+    code: "VALIDATION" | "NOT_FOUND" | "UNAUTHORIZED" | "FORBIDDEN" | "CONFLICT" | "INTERNAL";
     message: string;
     field?: string;
   };
