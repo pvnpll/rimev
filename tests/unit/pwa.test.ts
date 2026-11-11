@@ -142,14 +142,16 @@ describe("iOS PWA Password Suggestion & AutoFill Compliance", () => {
     expect(html).toContain('type="password"');
     expect(html).toContain('autoComplete="new-password"');
     expect(html).toContain('minLength="6"');
-    expect(html).toContain('passwordrules="minlength: 6; maxlength: 128;"');
+    // Let iOS use its default strong-password policy. Apple's generator may ignore
+    // custom rules with a minimum below 12 characters.
+    expect(html).not.toContain("passwordrules=");
     expect(html).toContain('maxLength="128"');
 
     // Confirm password field has id="confirm-password", name="confirm-password", type="password", and autocomplete="new-password"
     expect(html).toContain('for="confirm-password"');
     expect(html).toContain('id="confirm-password"');
     expect(html).toContain('name="confirm-password"');
-    expect(html.match(/passwordrules="minlength: 6; maxlength: 128;"/g)).toHaveLength(2);
+    expect(html).not.toContain("passwordrules=");
 
     // Inputs remain browser-owned so iOS can inject a generated password without React replacing it.
     expect(html).not.toMatch(/<input[^>]+value=/);

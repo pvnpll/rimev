@@ -186,7 +186,6 @@ export function AuthForm({ mode, redirectTo = "/practice" }: { mode: AuthMode; r
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
-                passwordrules={isSignup ? "minlength: 6; maxlength: 128;" : undefined}
                 maxLength={128}
                 className="pr-10"
               />
@@ -215,7 +214,6 @@ export function AuthForm({ mode, redirectTo = "/practice" }: { mode: AuthMode; r
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
-                  passwordrules="minlength: 6; maxlength: 128;"
                   maxLength={128}
                   className="pr-10"
                 />
