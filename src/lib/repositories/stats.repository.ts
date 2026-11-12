@@ -46,15 +46,15 @@ export const statsRepository = {
         }>
       >`
         SELECT 
-          (SELECT COUNT(*) FROM decks WHERE user_id = ${userId} AND is_archived = false) as deck_count,
-          (SELECT COUNT(*) FROM cards c JOIN decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false) as total_cards,
-          (SELECT COUNT(*) FROM card_scheduling_states css JOIN cards c ON css.card_id = c.id JOIN decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false AND css.due_at <= ${now}) as due_today,
-          (SELECT COUNT(*) FROM review_logs WHERE user_id = ${userId} AND reviewed_at >= ${todayStart}) as reviewed_today,
-          (SELECT COUNT(*) FROM card_scheduling_states css JOIN cards c ON css.card_id = c.id JOIN decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false AND css.interval_days > ${MATURE_INTERVAL_DAYS}) as mature_cards
+          (SELECT COUNT(*) FROM rimev_decks WHERE user_id = ${userId} AND is_archived = false) as deck_count,
+          (SELECT COUNT(*) FROM rimev_cards c JOIN rimev_decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false) as total_cards,
+          (SELECT COUNT(*) FROM rimev_card_scheduling_states css JOIN rimev_cards c ON css.card_id = c.id JOIN rimev_decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false AND css.due_at <= ${now}) as due_today,
+          (SELECT COUNT(*) FROM rimev_review_logs WHERE user_id = ${userId} AND reviewed_at >= ${todayStart}) as reviewed_today,
+          (SELECT COUNT(*) FROM rimev_card_scheduling_states css JOIN rimev_cards c ON css.card_id = c.id JOIN rimev_decks d ON c.deck_id = d.id WHERE d.user_id = ${userId} AND d.is_archived = false AND c.is_suspended = false AND css.interval_days > ${MATURE_INTERVAL_DAYS}) as mature_cards
       `,
       prisma.$queryRaw<Array<{ reviewed_at: Date }>>`
         SELECT reviewed_at
-        FROM review_logs
+        FROM rimev_review_logs
         WHERE user_id = ${userId}
           AND reviewed_at >= ${streakLookback}
         ORDER BY reviewed_at DESC

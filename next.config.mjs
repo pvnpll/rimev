@@ -9,6 +9,9 @@ const withSerwist = withSerwistInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/*": ["./prisma/supabase-ca.crt"],
+  },
 };
 
 export default withSerwist(nextConfig);
