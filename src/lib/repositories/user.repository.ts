@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
-import { generateUniqueUsername, normalizeUsername } from "@/lib/username";
+import { normalizeUsername } from "@/lib/username";
+import { generateUniqueUsername } from "@/lib/username.server";
 import type { UserProfile } from "@/types/user";
 
 function toProfile(row: {

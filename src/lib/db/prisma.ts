@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import path from "node:path";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -26,7 +27,11 @@ function getDatabaseUrl(): string | undefined {
     url = `${url}${separator}connection_limit=1`;
   }
 
-  return url;
+  const verifiedUrl = new URL(url);
+  verifiedUrl.searchParams.set("sslmode", "require");
+  verifiedUrl.searchParams.set("sslaccept", "strict");
+  verifiedUrl.searchParams.set("sslcert", path.join(process.cwd(), "prisma", "supabase-ca.crt"));
+  return verifiedUrl.toString();
 }
 
 
