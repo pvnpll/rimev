@@ -25,7 +25,7 @@ model User {
   feedback          Feedback[]
   aiLearnerContexts AiLearnerContext[]
 
-  @@map("users")
+  @@map("rimev_users")
 }
 
 // ─── Content ──────────────────────────────────────────────────
@@ -54,7 +54,7 @@ model Deck {
   @@index([userId, isArchived])
   @@index([isPublic, isArchived])
   @@index([userId, sourceDeckId])
-  @@map("decks")
+  @@map("rimev_decks")
 }
 
 // ─── Feedback ─────────────────────────────────────────────────
@@ -69,7 +69,7 @@ model Feedback {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
-  @@map("feedback")
+  @@map("rimev_feedback")
 }
 
 model Lesson {
@@ -84,7 +84,7 @@ model Lesson {
   cards Card[]
 
   @@index([deckId, sortOrder])
-  @@map("lessons")
+  @@map("rimev_lessons")
 }
 
 model Card {
@@ -111,7 +111,7 @@ model Card {
   @@index([deckId])
   @@index([lessonId])
   @@index([deckId, isSuspended])
-  @@map("cards")
+  @@map("rimev_cards")
 }
 
 model Tag {
@@ -126,7 +126,7 @@ model Tag {
   deckTags DeckTag[]
 
   @@unique([userId, name])
-  @@map("tags")
+  @@map("rimev_tags")
 }
 
 model CardTag {
@@ -137,7 +137,7 @@ model CardTag {
   tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([cardId, tagId])
-  @@map("card_tags")
+  @@map("rimev_card_tags")
 }
 
 model DeckTag {
@@ -148,7 +148,7 @@ model DeckTag {
   tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([deckId, tagId])
-  @@map("deck_tags")
+  @@map("rimev_deck_tags")
 }
 
 // ─── Scheduling ───────────────────────────────────────────────
@@ -171,7 +171,7 @@ model CardSchedulingState {
 
   @@index([dueAt])
   @@index([cardId, dueAt])
-  @@map("card_scheduling_states")
+  @@map("rimev_card_scheduling_states")
 }
 
 model ReviewLog {
@@ -195,7 +195,7 @@ model ReviewLog {
   @@index([cardId, reviewedAt])
   @@index([userId, reviewedAt])
   @@index([sessionId])
-  @@map("review_logs")
+  @@map("rimev_review_logs")
 }
 
 model ReviewSession {
@@ -213,7 +213,7 @@ model ReviewSession {
   reviewLogs ReviewLog[]
 
   @@index([userId, startedAt])
-  @@map("review_sessions")
+  @@map("rimev_review_sessions")
 }
 
 // ─── AI Context ───────────────────────────────────────────────
@@ -233,7 +233,7 @@ model AiLearnerContext {
 
   @@unique([userId, topic])
   @@index([userId])
-  @@map("ai_learner_contexts")
+  @@map("rimev_ai_learner_contexts")
 }
 
 model GuestIpTracker {
@@ -242,5 +242,5 @@ model GuestIpTracker {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("guest_ip_tracker")
+  @@map("rimev_guest_ip_tracker")
 }
