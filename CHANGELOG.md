@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.0] — 2026-11-12 (Draft release notes)
+
+**Shared database cutover** — Move Rimev to isolated `rimev_` objects in pvnpll, retain existing destination passwords, require sign-in again, validate database TLS, and prevent unsafe shared-schema commands.
+
+→ [Full release notes](docs/releases/v2.0.0.md)
+
 All notable releases of Rimev follow [Semantic Versioning](https://semver.org/) and [release-versioning.md](docs/application/release-versioning.md).
 
 Release notes are **drafted** on each `main` merge; **published** only when explicitly requested.
