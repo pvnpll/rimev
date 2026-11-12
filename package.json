@@ -21,10 +21,10 @@
     "vercel:setup": "tsx scripts/vercel-supabase-setup.ts",
     "prod": "bash scripts/prod-local.sh",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
+    "db:push": "node scripts/block-shared-schema-change.cjs",
+    "db:migrate": "node scripts/block-shared-schema-change.cjs",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma db push --force-reset && prisma db seed",
+    "db:reset": "node scripts/block-shared-schema-change.cjs",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },

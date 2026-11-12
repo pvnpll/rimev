@@ -9,3 +9,5 @@ Before deploying this branch, securely configure the destination `DATABASE_URL`,
 Re-run the row-by-row import verifier, test login and existing library data, and verify the health/stats routes against the destination before retiring the source. Existing sessions will require signing in again when changing the Supabase auth project.
 
 Do not run Prisma db push/reset against the shared database: the schema contains sibling application tables that Prisma does not manage. Apply only the reviewed prefixed migration. Do not clear or rename the source project while any deployment still uses it.
+
+The `db:push`, `db:migrate`, and `db:reset` npm commands now fail before making any connection. This prevents a partial application schema from reconciling or resetting sibling objects. Prisma client generation and read-only developer tools remain available.
